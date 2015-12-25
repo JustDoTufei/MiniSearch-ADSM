@@ -1,0 +1,554 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    {% load staticfiles %}
+    <title>MiniSearch</title>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-multiselect.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}" media="screen"/>
+    <script src="{% static 'js/bootstrap-multiselect.js' %}"></script>
+	<script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+	<script src="{% static 'js/locales/bootstrap-datetimepicker.fr.js' %}"></script>
+  </head>
+  <body>
+<!-- --> 
+<div class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{ current_url }}">MiniSearch<sup> ADS-M</sup></a>
+		</div>
+        <div class="navbar-collapse collapse" role="navigation">
+          <ul class="nav navbar-nav navbar-right hidden-sm">
+			<li><a href="{{ report_href }}">报表</a></li>
+            <li><a href="{{ logout_href }}">注销</a></li>
+          </ul>
+        </div>
+		<div>
+		<label class="col-md-1">&nbsp攻击源IP </label>
+		<label class="col-md-2"><input type="text" class="form-control" placeholder="127.0.0.1" id="input_src"></label>
+		
+		<label class="col-md-1">&nbsp源端口 </label>
+		<label class="col-md-2"><input type="text" class="form-control" placeholder="12345" id="input_sport"></label>
+		
+		<label for="dtp_input1" class="col-md-1">开始时间</label>
+		<label class="input-group date form_datetime col-md-4"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+			<input class="form-control" size="10" type="text" value="" id="input_start_time" readonly>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>			
+		</label>
+		<input type="hidden" id="dtp_input1" value="" />
+		
+		<label class="col-md-1">&nbsp目标IP </label>
+		<label class="col-md-2"><input type="text" class="form-control" placeholder="127.0.0.1" id="input_dst"></label>
+		
+		<label class="col-md-1">&nbsp目标端口 </label>
+		<label class="col-md-2"><input type="text" class="form-control" placeholder="80" id="input_dport"></label>
+		
+		<label for="dtp_input1" class="col-md-1">结束时间</label>
+		<label class="input-group date form_datetime col-md-4"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2">
+			<input class="form-control" size="10" type="text" value="" id="input_end_time" readonly>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+		</label>
+		<input type="hidden" id="dtp_input2" value="" />
+		</div>
+		<script type="text/javascript">
+			$('.form_datetime').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			});
+		</script>		
+		
+		
+		<div>
+			<div class="checkbox">
+			<div>
+				<label>攻击类型&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<label>
+					<input type="checkbox" id="tech_syn_flood">SYN-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_ack_flood">ACK-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_udp_flood">UDP-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_icmp_flood">ICMP-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_connection_flood">Connection-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_stream_flood">Stream-FLOOD&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_content_drop">Content-drop&nbsp
+				</label>
+				<label>
+					<input type="checkbox" id="tech_udp_dns_flood">UDP-DNS-FLOOD&nbsp
+				</label>
+			</div>
+			</div>		
+		</div>
+		
+		
+
+		
+		
+
+		<div>
+			<div class="checkbox">
+			<label>攻击特征&nbsp&nbsp</label>	
+				<label>
+					<select id="service-multiple-selected" multiple="multiple">
+						<optgroup label="SYN-Flood">
+							<option id="flag71" value="SYN-64">SYN-64 小于64字节syn包</option>
+							<option id="flag1" value="SYN_INVALID">SYN_INVALID 小于64字节syn包</option>
+							<option id="flag2" value="SYN-RANDOM-PORT">SYN-RANDOM-PORT 端口检查策略丢弃的syn包</option>
+							<option id="flag3" value="SYN-A">SYN-A A类源IP地址流量超限</option>
+							<option id="flag4" value="SYN-SL">SYN-SL SYN COOKIE-URL的SYN时序检查丢包</option>
+							<option id="flag5" value="SYN-COOKIE-LIMIT">SYN-COOKIE-LIMIT 反向探测包速率超限</option>
+							<option id="flag6" value="SYN-SURL">SYN-SURL  SYN COOKIE-URL丢包</option>
+							<option id="flag7" value="SYN-L">SYN-L SYN时序检查丢包</option>
+							<option id="flag8" value="SYN-CHECK">SYN-CHECK SYN算法丢包</option>
+							<option id="flag9" value="SYN-TRUST-LIMIT">SYN-TRUST-LIMIT 信任限速（限速）</option>
+							<option id="flag10" value="SYN-TRUST-LIMIT-BANNED">SYN-TRUST-LIMIT-BANNED 信任限速(加黑名单)</option>
+						</optgroup>
+						<optgroup label="ACK-Flood">
+							<option id="flag11" value="ACK-RANDOM-PORT">ACK-RANDOM-PORT 端口检查策略丢弃的ACK包</option>
+							<option id="flag12" value="ACK-L">ACK-L ACK阈值超限</option>
+							<option id="flag13" value="ACK-E、ACK-A">ACK-E、ACK-A ACK防护丢包</option>
+							<option id="flag14" value="ACK-E、ACK-S">ACK-E、ACK-S SYN COOKIE-URL和ACK同时验证时丢包</option>
+							<option id="flag15" value="Frag">Frag ACK分片</option>
+							<option id="flag16" value="ACK-TRUST-LIMIT">ACK-TRUST-LIMIT  信任限速（限速）</option>
+							<option id="flag17" value="ACK-TRUST-LIMIT-BANNED">ACK-TRUST-LIMIT-BANNED 信任限速(加黑名单)</option>
+						</optgroup>
+						<optgroup label="UDP-Flood">
+							<option id="flag18" value="UDP-RANDOM-PORT">UDP-RANDOM-PORT 端口检查策略丢弃的UDP包</option>
+							<option id="flag19" value="SRC-PORT-TC">SRC-PORT-TC 源IP和源端口流量限制</option>
+							<option id="flag20" value="SRC-TC">SRC-TC 源IP流量限制</option>
+							<option id="flag21" value="DST-PORT-TC">DST-PORT-TC 目的IP和目的端口流量限制</option>
+							<option id="flag22" value="DST-TC">DST-TC 目的IP流量限制</option>
+							<option id="flag23" value="UDP-A">UDP-A  A类源带宽限制</option>
+							<option id="flag24" value="PortRule">PortRule UDP端口规则</option>
+							<option id="flag25" value="LenRule">LenRule UDP包长规则</option>
+							<option id="flag26" value="Zero-Len-A">Zero-Len-A 只在攻击状态下，自动丢弃payload为0的包</option>
+							<option id="flag27" value="Zero-Len-F">Zero-Len-F 丢弃全部payload为0的包</option>
+							<option id="flag28" value="PATTERN">PATTERN UDP模式检查</option>
+							<option id="flag29" value="Frag">Frag 分片（web配置丢弃）</option>
+							<option id="flag30" value="FragControl">FragControl UDP分片包</option>
+							<option id="flag31" value="NONE_REGISTER">NONE_REGISTER  SIP register报文检查</option>
+							<option id="flag32" value="NONCE_CHECK_FAIL">NONCE_CHECK_FAIL SIP nonce检查失败</option>
+							<option id="flag33" value="NONCE_CHECK_NO">NONCE_CHECK_NO	SIP无nonce字段</option>
+							<option id="flag34" value="UDP-TRUST-LIMIT">UDP-TRUST-LIMIT 信任限速（限速）</option>
+							<option id="flag35" value="UDP-TRUST-LIMIT-BANNED">UDP-TRUST-LIMIT-BANNED 信任限速（加黑名单）</option>
+						</optgroup>
+						<optgroup label="ICMP-Flood">
+							<option id="flag36" value="Proto=ICMP">Proto=ICMP 常规ICMP</option>
+							<option id="flag37" value="FragICMP">FragICMP 分片ICMP</option>
+							<option id="flag38" value="Proto=%d">Proto=%d 非tcp，udp，icmp协议的丢包</option>
+							<option id="flag39" value="FragProto=%d">FragProto=%d 非tcp，udp，icmp协议的分片丢包</option>
+							<option id="flag40" value="ICMP-TRUST-LIMIT">ICMP-TRUST-LIMIT 信任限速（限速）</option>
+							<option id="flag41" value="ICMP-TRUST-LIMIT-BANNED">ICMP-TRUST-LIMIT-BANNED  信任限速(加黑名单)</option>
+						</optgroup>
+						<optgroup label="Stream-Flood">
+							<option id="flag42" value="INVALID_TCP_FLAG">INVALID_TCP_FLAG 无效tcp flag数据包</option>
+							<option id="flag43" value="FLOW-CONTROL">FLOW-CONTROL 流控丢包</option>
+						</optgroup>
+						<optgroup label="CONTENT-DROP">
+							<option id="flag44" value="LAYER4">LAYER4 访问控制策略</option>
+							<option id="flag45" value="LAYER7">LAYER7 模式匹配规则</option>
+							<option id="flag46" value="RE_PATTERN">RE_PATTERN 正则匹配</option>
+							<option id="flag47" value="HTTP-KEYWORD-N">HTTP-KEYWORD-N HTTP关键字</option>
+							<option id="flag48" value="DNS-KEYWORD-N">DNS-KEYWORD-N DNS关键字</option>
+							<option id="flag49" value="GEOIP">GEOIP  GeoIP规则</option>
+						</optgroup>
+						<optgroup label="CC_DROPCC">
+							<option id="flag50" value="CC_LAYER7">CC_LAYER7 CC流程模式匹配</option>
+						</optgroup>
+						<optgroup label="Connection-flood">
+							<option id="flag51" value="BLACKLIST">BLACKLIST 黑名单丢弃</option>
+							<option id="flag52" value="LAND">LAND LAND攻击丢包</option>
+							<option id="flag53" value="Conn_limit">Conn_limit 连接耗尽策略</option>
+							<option id="flag54" value="URLACL_BLOCK">URLACL_BLOCK URLACL普通过滤</option>
+							<option id="flag55" value="URLACL_BLOCK_PROXY">URLACL_BLOCK_PROXY CC代理过滤</option>
+							<option id="flag56" value="SPEED_LIMIT">SPEED_LIMIT URLACL限速</option>
+							<option id="flag57" value="HTTP_POST_DECODE">HTTP_POST_DECODE POST解码失败</option>
+							<option id="flag58" value="HTTP_POST">HTTP_POST HTTP POST防护检查</option>
+							<option id="flag59" value="XFOR-ERROR">XFOR-ERROR CC代理防护解码失败</option>
+							<option id="flag60" value="SLOW_ATK_LIMIT">SLOW_ATK_LIMIT 慢速攻击防护</option>
+							<option id="flag61" value="INVALID-HOST">INVALID-HOST 非法的host字段</option>
+							<option id="flag62" value="HTTP_GET">HTTP_GET  HTTP GET防护检查</option>
+							<option id="flag63" value="Three- H">Three- H  空连接检查</option>
+							<option id="flag64" value="HTTPS_RENEGOTIATION">HTTPS_RENEGOTIATION  https重协商攻击防护</option>
+							<option id="flag65" value="HTTPS_INVALID">HTTPS_INVALID  https非法包</option>
+						</optgroup>
+						<optgroup label="HTTP-Proxy-Flood">
+							<option id="flag66" value="HTTP_PROXY_GET">HTTP_PROXY_GET HTTP代理防护检查</option>
+						</optgroup>
+						<optgroup label="UDP-DNS-Flood">
+							<option id="flag67" value="DIRTY25">DIRTY25 DNS异常查询</option>
+							<option id="flag68" value="DIRTY21">DIRTY21 DNS首部长度异常</option>
+							<option id="flag69" value="DNS">DNS DNS查询阈值超限：DNS算法1、算法2</option>
+							<option id="flag70" value="NS-COOKIE">NS-COOKIE DNS查询阈值超限：DNS算法3</option>
+						</optgroup>
+					</select>
+					<script type="text/javascript">
+						$(document).ready(function(){
+							$('#service-multiple-selected').multiselect({
+									enableFiltering: true,
+									includeSelectAllOption: true,
+									maxHeight: 400,
+									dropUp: false,
+									buttonWidth: '200px',
+									enableCollapsibleOptGroups: true
+							});
+						});
+					</script>
+				</label>
+				<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<button type="button" class="btn btn-success" id="btn_query">&nbsp&nbsp查&nbsp&nbsp&nbsp&nbsp找&nbsp&nbsp</button>
+				<label></label>
+				<button type="button" class="btn btn-primary">&nbsp&nbsp重&nbsp&nbsp&nbsp&nbsp置&nbsp&nbsp</button>
+			</div>
+				
+		</div>
+		
+		
+
+
+
+
+
+
+
+		
+    </div>
+</div>
+
+<!--   -->	  
+  
+  <div class="container">
+  <table class="table table-hover" id="data_table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>日期</th>
+      <th>时间</th>
+      <th>攻击类型</th>
+      <th>源IP</th>
+      <th>目标IP</th>
+      <th>源端口</th>
+      <th>目标端口</th>
+	  <th>特征</th>
+    </tr>
+    </thead>
+    <tfoot>
+      <td colspan="9">
+        <nav>
+          <ul class="pagination">
+          </ul>
+        </nav>
+      </td>
+    </tfoot>
+    <tbody>
+    </tbody>
+  </table>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="detail_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">详细信息</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <tr>
+              <th class="col-md-1">规则编号</th><td class="col-md-1" rowspan="1" data-index="0"></td>
+              <th class="col-md-1">规则名称</th><td class="col-md-1" rowspan="1" data-index="8" colspan="3"></td>
+            </tr>
+			
+			<tr>
+				<th class="col-md-1">规则更新时间</th><td class="col-md-1" rowspan="1" data-index="1"></td>
+				<th class="col-md-1">事件所属大类</th><td class="col-md-1" rowspan="1" data-index="2" colspan="3"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">事件威胁等级</th><td class="col-md-1" rowspan="1" data-index="3"></td>
+				<th class="col-md-1">事件技术手段</th><td class="col-md-1" rowspan="1" data-index="4" colspan="3"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">服务类型</th><td class="col-md-1" rowspan="1" data-index="5" ></td>
+				<th class="col-md-1">事件流行程度</th><td class="col-md-1" rowspan="1" data-index="6"></td>
+				<th class="col-md-1">相关漏洞</th><td class="col-md-1" rowspan="1" data-index="7"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">威胁信息</th><td class="col-md-1" rowspan="1" data-index="9"></td>
+				<th class="col-md-1">相关应用</th><td class="col-md-1" rowspan="1" data-index="10" colspan="3"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">CVE ID</th><td class="col-md-1" rowspan="1" data-index="17"></td>
+				<th class="col-md-1">Bugtraq ID</th><td class="col-md-1" rowspan="1" data-index="16"></td>
+				<th class="col-md-1">NSFOCUS ID</th><td class="col-md-1" rowspan="1" data-index="15"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">详细信息</th><td class="col-md-1" rowspan="1" data-index="11" colspan="5"></td>
+			</tr>	
+			<tr>
+				<th class="col-md-1">影响系统</th><td class="col-md-1" rowspan="1" data-index="12" colspan="5"></td>
+			</tr>
+			<tr>
+				<th class="col-md-1">相关应用</th><td class="col-md-1" rowspan="1" data-index="13" colspan="5"></td>
+			</tr>					
+			<tr>
+				<th class="col-md-1">解决方案</th><td class="col-md-1" rowspan="1" data-index="14" colspan="5"></td>
+			</tr>	
+			<tr>
+				<th class="col-md-1">原始链接</th><td class="col-md-1" rowspan="1" id="rule_tmp_url" colspan="5"></td>
+			</tr>	
+
+			
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/utils.js' %}"></script>
+  
+  
+  
+  <script type="text/javascript">
+      var records_per_page = 20;
+      //var query_table = ['name', 'sid', 'idcard'];
+	  var query_table = ['rule_id', 'rule_vulnerability_title', 'rule_nsfocus_id', 'rule_bugtraq_id', 'rule_cve_id' ];
+	  
+      var query_param = query_table[0];
+      var query_url = "{{ query_url }}";
+      var current_page = 0;
+      var rows_count = -1;
+      var data_obj = null;
+	  var request_count_tmp;
+
+	  var flag_list = new Array();
+	  
+      function enable_button(enable) {
+          if (enable) {
+              $("#btn_query").removeClass("disabled");
+          } else {
+              $("#btn_query").addClass("disabled");
+          }
+      }
+      
+      function fill_blank() {
+          if ("" == $("#input_query").val()) {
+              $("#input_query").val("%");
+          }
+      }
+      
+      function query_count() {
+          var ret = 0;		  
+		  request_count_tmp = request_count_tmp + '"return_count":true}';
+          $.ajax({
+              url: query_url,
+              data: request_count_tmp,
+              type: 'post',
+              cache: false,
+              async: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      ret = -1;
+                  }
+                  else {
+                      ret = JSON.parse(data)[0][0];
+                  }
+              },
+              
+              error: function() {
+                  ret = -1;
+              }
+          });
+          
+          return ret;
+      }
+      
+      function query(page) {
+          current_page = page;
+          enable_button(false);
+		  
+		  request_tmp = 'request={';
+		  
+		  if ( $("#input_src").val() != "" ){
+			request_tmp = request_tmp + '"input_src":"' + $("#input_src").val() + '",';
+		  }
+		  if ( $("#input_sport").val() != "" ){
+			request_tmp = request_tmp + '"input_sport":"' + $("#input_sport").val() + '",';
+		  }
+		  if ( $("#input_dst").val() != "" ){
+			request_tmp = request_tmp + '"input_dst":"' + $("#input_dst").val() + '",';
+		  }
+		  if ( $("#input_dport").val() != "" ){
+			request_tmp = request_tmp + '"input_dport":"' + $("#input_dport").val() + '",';
+		  }
+		  if ( $("#tech_syn_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_syn_flood":"true",';
+		  }
+		  if ( $("#tech_ack_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_ack_flood":"true",';
+		  }
+		  if ( $("#tech_udp_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_udp_flood":"true",';
+		  }
+		  if ( $("#tech_icmp_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_icmp_flood":"true",';
+		  }
+		  if ( $("#tech_connection_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_connection_flood":"true",';
+		  }
+		  if ( $("#tech_stream_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_stream_flood":"true",';
+		  }
+		  if ( $("#tech_content_drop").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_content_drop":"true",';
+		  }
+		  if ( $("#tech_udp_dns_flood").prop("checked") == true){
+			request_tmp = request_tmp + '"tech_udp_dns_flood":"true",';
+		  }	
+
+			flag_list = new Array();
+			
+			for ( i=0;i<=100;i++ ){
+				var id_tmp = "flag" + parseInt(i);
+				if ( $("#"+id_tmp).prop("selected") == true){
+					flag_list.push($("#"+id_tmp).val())
+				}		
+			}
+			if ( flag_list.length != 0 ){
+				request_tmp = request_tmp + '"flag":"' + String(flag_list) +'",';
+			}
+			
+			
+			var start_time="";
+			var end_time="";
+			if ( $("#input_start_time").val() != null && $("#input_start_time").val() != "" ){
+				start_time = $("#input_start_time").val()+":00";
+				request_tmp = request_tmp + '"start_time":"' + start_time + '",';
+				
+			}
+			if ( $("#input_end_time").val() != null && $("#input_end_time").val() != "" ){
+					end_time = $("#input_end_time").val()+":00";
+					request_tmp = request_tmp + '"end_time":"' + end_time + '",';
+			}
+		  	  
+		  request_count_tmp = request_tmp;
+		  request_tmp = request_tmp + '"page":' + String(page) + '}';
+		  
+		  //alert(request_tmp)
+		  
+          $.ajax({
+              url: query_url,
+              data: request_tmp,
+              type: 'post',
+              cache: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      // TODO::!!!
+                      alert(data);
+                  } else {
+                      data_obj = JSON.parse(data);
+                      table_content = parse_to_table(page * records_per_page + 1, data_obj);
+                      $("#data_table tbody").html(table_content);
+                      rows_count = (-1 == rows_count) ? query_count() : rows_count;
+                      
+                      $("#data_table tfoot ul").html(pagination(Math.ceil(rows_count / records_per_page), current_page + 1));
+                  }
+
+                  enable_button(true);
+              },
+              
+              error: function() {
+                  // TODO::!!!
+                  alert("failed");
+                  enable_button(true);
+              }
+          });
+      }
+      
+      function page_bar_click(page) {
+          query(page - 1);
+      }
+      
+      function show_detail(index) {
+          var sid = data_obj[index][2];
+		  var detail_rule_id = "";
+          
+          $("#detail_dialog td").each(function() {
+              if ("undefined" != $(this).attr("data-index")) {
+                  var data_index = Number($(this).attr("data-index"));
+                  data = data_obj[index][data_index];
+                  if (11 == data_index) {
+                      data = data.replace(/-/gm, '');
+                  }
+				  if (0 == data_index){
+						var rule_tmp_url = '<a href="/static/rule_tmp/' + data + '.html"  target="_blank" >' + '查看</a>';
+						$("#rule_tmp_url").html(rule_tmp_url)
+				  }
+                  $(this).html(data);
+              }
+          });
+
+          $("#detail_dialog").modal();
+		  
+      }
+      
+      $(document).ready(function() {
+		/*
+          $("#query_type_group a").click(function() {
+              $("#query_type_group button").html($(this).html() + '<span class="caret"></span>');
+              query_param = query_table[Number($(this).attr("val"))];
+              $("#input_query").val("");
+          });
+        */  
+          $("#btn_query").click(function() {		  
+				
+              current_page = 0;
+              rows_count = -1;
+              fill_blank();
+			  			  
+              query(0);
+          });
+          
+          $(".navbar-form").submit(function() {
+              current_page = 0;
+              rows_count = -1;
+              fill_blank();
+              query(0);
+              return false;
+          });
+          
+          $("#detail_dialog th").addClass("info");
+          
+          query(0);
+      });
+  </script>
+  </body>
+</html>

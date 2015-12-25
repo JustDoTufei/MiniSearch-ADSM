@@ -1,0 +1,660 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    {% load staticfiles %}
+    <title>MiniSearch</title>
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-multiselect.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.css' %}" media="screen"/>
+    <script src="{% static 'js/bootstrap-multiselect.js' %}"></script>
+	<script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+	<script src="{% static 'js/locales/bootstrap-datetimepicker.fr.js' %}"></script>
+	<script src="{% static 'js/ichart.1.2.1.min.js' %}"></script>
+  </head>
+  <body>
+<!-- --> 
+<div class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{ current_url }}">MiniSearch<sup> ADS-M</sup></a>
+		</div>
+        <div class="navbar-collapse collapse" role="navigation">
+          <ul class="nav navbar-nav navbar-right hidden-sm">
+			<li><a href="{{ info_url }}">日志</a></li>
+            <li><a href="{{ logout_href }}">注销</a></li>
+          </ul>
+        </div>		
+	</div>
+	<div class="container">
+		<label class="col-md-1"><button type="button" class="btn btn-success" id="btn_report">生成报表</button></label>
+		<label class="col-md-1"><button type="button" class="btn btn-primary" id="btn_reset">下载报表</button></label>
+		<label class="col-md-1"></label>
+		<label class="col-md-1"><input type="radio" id="day_report_radio" checked onclick="changeRadio('day')">日报</label>
+		<label class="col-md-1"><input type="radio" id="week_report_radio" onclick="changeRadio('week')">周报</label>
+		<label class="col-md-1"><input type="radio" id="month_report_radio" onclick="changeRadio('month')">月报</label>
+		<label for="dtp_input1" class="col-md-1">报表时间</label>
+		<label class="input-group date form_datetime col-md-3"  data-date-format="yyyy-mm-dd" data-link-field="dtp_input1">
+				<input class="form-control" size="10" type="text" value="" id="input_report_time" readonly>
+				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+				<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>	
+		</label>
+		<input type="hidden" id="dtp_input1" value="" />
+		
+	</div>
+	
+	<script type="text/javascript">
+		$('.form_datetime').datetimepicker({
+			//language:  'fr',
+			weekStart: 1,
+			todayBtn:  1,
+			autoclose: true,
+			todayHighlight: 1,
+			forceParse: 0,
+			showMeridian: 1,
+			minView:2,
+			startView:2,
+		});
+		$('.form_datetime').datetimepicker('setStartDate', '2015-01-01');
+		
+		function changeRadio(tag){
+			if (tag == "day"){
+				$('#day_report_radio').attr("checked", true);
+				$('#week_report_radio').attr("checked", false);
+				$('#month_report_radio').attr("checked", false);
+				
+				$('.form_datetime').datetimepicker('remove');
+				$('.form_datetime').datetimepicker({
+					weekStart: 1,
+					todayBtn:  1,
+					autoclose: true,
+					todayHighlight: 1,
+					forceParse: 0,
+					showMeridian: 1,
+					minView: 2,
+					startView:2,
+				});
+				$('.form_datetime').datetimepicker('setStartDate', '2015-01-01');
+				$('#input_report_time').val("");
+			}
+			else if (tag == "week"){
+				$('#day_report_radio').attr("checked", false);
+				$('#week_report_radio').attr("checked", true);
+				$('#month_report_radio').attr("checked", false);
+				$('.form_datetime').datetimepicker('remove');
+				$('.form_datetime').datetimepicker({
+					weekStart: 1,
+					todayBtn:  1,
+					autoclose: true,
+					todayHighlight: 1,
+					forceParse: 0,
+					showMeridian: 1,
+					minView: 2,
+					startView:2,
+				});
+				$('.form_datetime').datetimepicker('setStartDate', '2015-01-01');
+				$('#input_report_time').val("");
+			}
+			else if ( tag == "month"){
+				$('#day_report_radio').attr("checked", false);
+				$('#week_report_radio').attr("checked", false);
+				$('#month_report_radio').attr("checked", true);
+				$('.form_datetime').datetimepicker('remove');
+				$('.form_datetime').datetimepicker({
+					weekStart: 1,
+					todayBtn:  1,
+					autoclose: true,
+					todayHighlight: 1,
+					forceParse: 0,
+					showMeridian: 1,
+					minView: 3,
+					startView:3,
+				});
+				$('.form_datetime').datetimepicker('setStartDate', '2015-01-01');
+				$('#input_report_time').val("");
+			}
+			else{
+				return;
+			}		
+		}
+	
+	var report_start_date = "";
+	var report_end_date = "";
+	
+	$('.form_datetime').datetimepicker().on('changeDate', 
+		function(ev){
+			report_start_date = "";
+			report_end_date = "";
+			if ( $('#day_report_radio').prop("checked") == true ){
+				report_start_date = $('#input_report_time').val();
+				report_end_date = $('#input_report_time').val();
+			}
+			
+			if ( $('#week_report_radio').prop("checked") == true ){
+				var monday = new Date( $('#input_report_time').val() );
+				var sunday = new Date( $('#input_report_time').val() );
+				
+				monday.setDate(monday.getDate() + 1 - monday.getDay());
+				sunday.setDate(sunday.getDate() + 7 - sunday.getDay());
+				
+				report_start_date = monday.getFullYear() + "-" + String(Number(monday.getMonth())+1) + "-" + monday.getDate();
+				report_end_date = sunday.getFullYear() + "-" + String(Number(sunday.getMonth())+1) + "-" + sunday.getDate();
+				
+				$('#input_report_time').val(report_start_date + "~" + report_end_date);				
+			}
+			if ( $('#month_report_radio').prop("checked") == true ){
+				var first_day = new Date( $('#input_report_time').val() );
+				var last_day = new Date( $('#input_report_time').val() );
+				
+				first_day.setDate(1);
+				last_day.setMonth(last_day.getMonth()+1);
+				last_day.setDate(0);
+				
+				report_start_date = first_day.getFullYear() + "-" + String(Number(first_day.getMonth())+1) + "-" + first_day.getDate();
+				report_end_date = last_day.getFullYear() + "-" + String(Number(last_day.getMonth())+1) + "-" + last_day.getDate();
+				
+				$('#input_report_time').val(report_start_date + "~" + report_end_date);	
+			}			
+		}
+	);
+	
+	$("#btn_report").click(function() {		  
+		if ( $("#input_report_time").val() == "" ){
+			alert("请先选择报表时间");
+			return;
+		}
+		
+		var request_tmp = "";
+		var report_type = "";
+		var request_str = "";
+		
+		if ( $('#day_report_radio').prop("checked") == true ){
+			report_type = "day"		
+			// 生成图表2的x坐标——日报
+			labels = new Array();
+			for ( tmp=0;tmp<24;tmp++){
+				labels.push( tmp.toString() );
+			}
+			
+		}
+		if ( $('#week_report_radio').prop("checked") == true ){
+			report_type = "week"		
+			// 生成图表2的x坐标——周报
+			var first_day = new Date( report_start_date );
+			var last_day = new Date( report_end_date );
+			labels = new Array();
+			
+			for (i=0; i<= Number(last_day - first_day) /86400000; i++){
+
+				 day_tmp = new Date(first_day.valueOf() + (i*86400000));
+				 tmp = day_tmp.getFullYear() + "-" + day_tmp.getMonth() + "-" + day_tmp.getDate();
+				 labels.push(tmp);
+			}
+			
+		}
+		if ( $('#month_report_radio').prop("checked") == true ){
+			report_type = "month"
+			// 生成图表2的x坐标——月报
+			var first_day = new Date( report_start_date );
+			var last_day = new Date( report_end_date );
+			labels = new Array();
+			
+			for (i=0; i<= Number(last_day - first_day) /86400000; i++){
+
+				 day_tmp = new Date(first_day.valueOf() + (i*86400000));
+				 tmp = day_tmp.getDate();
+				 labels.push(tmp);
+			}
+		}
+		
+		request_tmp = 'request={';
+		request_tmp = request_tmp + '"report_type":"' + report_type + '",';
+		request_tmp = request_tmp + '"report_start_date":"' + report_start_date + '",';
+		request_tmp = request_tmp + '"report_end_date":"' + report_end_date + '",';
+		
+		request_str = request_tmp + '"report_icon":"1" }';		
+		enable_button(false);	
+		
+		$.ajax({
+              url: report_query_url,
+              data: request_str,
+              type: 'post',
+              cache: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      // TODO::!!!
+                      alert(data);
+                  } else {
+                      data1 = JSON.parse(data);
+					  $(draw1());					  
+                  }
+                  enable_button(true);
+              },
+              
+              error: function() {
+                  // TODO::!!!
+                  alert("failed");
+                  enable_button(true);
+              }
+        });
+		
+		request_str = request_tmp + '"report_icon":"2" }';
+		enable_button(false);
+		
+		
+		$.ajax({
+              url: report_query_url,
+              data: request_str,
+              type: 'post',
+              cache: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      // TODO::!!!
+                      alert(data);
+                  } else {
+                      data2 = JSON.parse(data);
+					  //alert(data2['SYN-Flood']);
+					  $(draw2());							
+                  }
+                  enable_button(true);
+              },
+              
+              error: function() {
+                  // TODO::!!!
+                  alert("failed");
+                  enable_button(true);
+              }
+        });
+		
+		request_str = request_tmp + '"report_icon":"3" }';
+		enable_button(false);
+
+		$.ajax({
+              url: report_query_url,
+              data: request_str,
+              type: 'post',
+              cache: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      // TODO::!!!
+                      alert(data);
+                  } else {
+						//alert(data);
+                      data3 = JSON.parse(data);
+					  //alert(data3);
+					  $(draw3());							
+                  }
+                  enable_button(true);
+              },
+              
+              error: function() {
+                  // TODO::!!!
+                  alert("failed");
+                  enable_button(true);
+              }
+        });		
+		
+		
+				
+    });
+	
+	$("#btn_reset").click(function() {
+		
+	
+	});
+	
+	function enable_button(enable) {
+          if (enable) {
+              $("#btn_report").removeClass("disabled");
+          } else {
+              $("#btn_report").addClass("disabled");
+          }
+    }
+	
+	
+	
+	
+		
+	</script>	
+
+	
+	
+</div>
+
+<!--   -->	  
+  
+  <div class="container">
+  
+  
+  
+  
+  
+  <script>
+  
+  var report_query_url = "{{ report_query_url }}";
+  var data1;
+
+  
+  
+  function draw1(){				    	
+			var chart = new iChart.Pie3D({
+				render : 'canvasDiv1',
+				data: data1,
+				title : {
+					text : '攻击类型分布',
+					height:40,
+					fontsize : 20,
+					color : '#282828'
+				},
+				footnote : {
+					text : '攻击类型分布',
+					color : '#486c8f',
+					fontsize : 12,
+					padding : '0 38'
+				},
+				sub_option : {
+					mini_label_threshold_angle : 40,//迷你label的阀值,单位:角度
+					mini_label:{//迷你label配置项
+						fontsize:20,
+						fontweight:600,
+						color : '#ffffff'
+					},
+					label : {
+						background_color:null,
+						sign:false,//设置禁用label的小图标
+						padding:'0 4',
+						border:{
+							enable:false,
+							color:'#666666'
+						},
+						fontsize:11,
+						fontweight:600,
+						color : '#4572a7'
+					},
+					border : {
+						width : 2,
+						color : '#ffffff'
+					},
+					listeners:{
+						parseText:function(d, t){
+							return d.get('value');//自定义label文本
+						}
+					} 
+				},
+				legend:{
+					enable:true,
+					padding:0,
+					offsetx:120,
+					offsety:50,
+					color:'#3e576f',
+					fontsize:20,//文本大小
+					sign_size:20,//小图标大小
+					line_height:28,//设置行高
+					sign_space:10,//小图标与文本间距
+					border:false,
+					align:'left',
+					background_color : null//透明背景
+				}, 
+				shadow : true,
+				shadow_blur : 6,
+				shadow_color : '#aaaaaa',
+				shadow_offsetx : 0,
+				shadow_offsety : 0,
+				background_color:'#f1f1f1',
+				align:'right',//右对齐
+				offsetx:-100,//设置向x轴负方向偏移位置60px
+				offset_angle:-90,//逆时针偏移120度
+				width : 800,
+				height : 400,
+				radius:150
+			});
+			//利用自定义组件构造右侧说明文本
+			chart.plugin(new iChart.Custom({
+					drawFn:function(){
+						//在右侧的位置，渲染说明文字
+						chart.target.textAlign('start')
+						.textBaseline('top')
+						.textFont('600 20px Verdana')
+						.fillText('攻击类型',130,110,false,'#be5985',false,24);
+						//.textFont('600 12px Verdana')
+						//.fillText('Source:ComScore,2012',120,160,false,'#999999');
+					}
+			}));
+			
+			chart.draw();
+	};
+	
+	$(draw1());
+	
+	
+	</script>
+	
+	<div id='canvasDiv1'></div>
+	
+	<script>
+	
+	var data2;
+	var labels = new Array();
+	
+	function draw2(){
+
+			data2 = [
+				{
+					name : 'SYN',
+					value:data2['SYN-Flood'],
+					color:'#4572a7',
+					line_width:2
+				},
+				{
+					name : 'ACK',
+					value:data2['ACK-Flood'],
+					color:'#aa4643',
+					line_width:2
+				},
+				{
+					name : 'UDP',
+					value:data2['UDP-Flood'],
+					color:'#89a54e',
+					line_width:2
+				},
+				{
+					name : 'ICMP',
+					value:data2['ICMP-Flood'],
+					color:'#80699b',
+					line_width:2
+				},
+				{
+					name : 'Connection',
+					value:data2['Connection-flood'],
+					color:'#3d96ae',
+					line_width:2
+				},
+				{
+					name : 'Stream',
+					value:data2['Stream-Flood'],
+					color:'#a5c2d5',
+					line_width:2
+				},
+				{
+					name : 'Content',
+					value:data2['Content-Drop'],
+					color:'#76a871',
+					line_width:2
+				},
+				{
+					name : 'UDP-DNS',
+					value:data2['UDP-DNS-Flood'],
+					color:'#cbab4f',
+					line_width:2
+				}
+			];
+			
+			var line = new iChart.LineBasic2D({
+				render : 'canvasDiv2',
+				data: data2,
+				align:'center',
+				title : '时间段内攻击次数',
+				//subtitle : '平均每个人访问2-3个页面(访问量单位：万)',
+				footnote : '时间段内攻击次数',
+				width : 800,
+				height : 400,
+				tip:{
+					enable:true,
+					shadow:true
+				},
+				legend : {
+					enable : true,
+					row:1,//设置在一行上显示，与column配合使用
+					column : 'max',
+					valign:'top',
+					sign:'bar',
+					background_color:null,//设置透明背景
+					offsetx:-80,//设置x轴偏移，满足位置需要
+					border : true
+				},
+				crosshair:{
+					enable:true,
+					line_color:'#62bce9'
+				},
+				sub_option : {
+					label:false,
+					point_hollow : false
+				},
+				coordinate:{
+					width:640,
+					height:240,
+					axis:{
+						color:'#9f9f9f',
+						width:[0,0,2,2]
+					},
+					grids:{
+						vertical:{
+							way:'share_alike',
+							value:5
+						}
+					},
+					scale:[{
+						 position:'left',	
+						 start_scale:0,
+						 end_scale:100,
+						 scale_space:10,
+						 scale_size:2,
+						 scale_color:'#9f9f9f'
+					},{
+						 position:'bottom',	
+						 labels:labels
+					}]
+				}
+			});
+		
+		//开始画图
+		line.draw();
+	}
+	
+	$(draw2());
+	
+	</script>
+	
+	<br/>
+	<br/>
+	
+	<div id="canvasDiv2"></div>
+	
+	<script>
+		var data3;
+		
+		function draw3(){
+
+			
+			new iChart.Column2D({
+				render : 'canvasDiv3',
+				data: data3,
+				title : '受到攻击最多的目标IP Top10',
+				showpercent:true,
+				decimalsnum:2,
+				width : 800,
+				height : 400,
+				coordinate:{
+					background_color:'#fefefe',
+					scale:[{
+						 position:'left',	
+						 start_scale:0,
+						 end_scale:40,
+						 scale_space:8,
+						 listeners:{
+							parseText:function(t,x,y){
+								return {text:t+"%"}
+							}
+						}
+					}]
+				}
+			}).draw();
+		}
+		
+		$(draw3());
+		
+	</script>				
+	
+	<br/>
+	<br/>
+	<div id="canvasDiv3"></div>
+	  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!--
+  <table class="table table-hover" id="data_table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>日期</th>
+      <th>时间</th>
+      <th>攻击类型</th>
+      <th>源IP</th>
+      <th>目标IP</th>
+      <th>源端口</th>
+      <th>目标端口</th>
+	  <th>特征</th>
+    </tr>
+    </thead>
+    <tfoot>
+      <td colspan="9">
+        <nav>
+          <ul class="pagination">
+          </ul>
+        </nav>
+      </td>
+    </tfoot>
+    <tbody>
+    </tbody>
+  </table>
+  
+  -->
+  
+  
+  </div>
+  
+  
+  </body>
+</html>

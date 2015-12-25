@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% load staticfiles %}
+
+    <title>sign in</title>
+
+    <!-- Bootstrap core CSS -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin" id="form_signin">
+        <h2 class="form-signin-heading">sign in</h2>
+        <label for="input_user" class="sr-only">User Name</label>
+        <input type="text" id="input_user" class="form-control" placeholder="user name" required autofocus>
+        <label for="input_password" class="sr-only">password</label>
+        <input type="password" id="input_password" class="form-control" placeholder="password" required>
+        <div class="text-right"><label class="text-danger hide" id="label_failed">failed</label></div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn_submit">sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}" ></script>
+    
+    <script type="text/javascript">
+        function show_failed(content) {
+            var label = $("#label_failed");
+            if (null == content) {
+                label.addClass("hide");
+            } else {
+                label.html(content);
+                label.removeClass("hide");
+            }
+        }
+    
+        $(document).ready(function() {
+            var login_url = "{{ login_url }}";
+            var on_success = "{{ on_success }}";
+            
+            $("#form_signin").submit(function e() {
+           
+                $("#btn_submit").addClass("disabled");
+                
+                $.ajax({
+                    url: login_url,
+                    data: { user: $("#input_user").val(), password: $("#input_password").val() },
+                    type: 'post',
+                    cache: false,
+                    dataType: 'json',
+                    
+                    success: function(data) {
+                        $("#btn_submit").removeClass("disabled");
+                        if (data.result) {
+                            location.href = on_success;
+                            show_failed(null);
+                        } else {
+                            show_failed("invalid username or password.");
+                            $("#input_password").val("");
+                        }
+                    },
+                    
+                    error: function() {
+                        $("#btn_submit").removeClass("disabled");
+                        show_failed("failed. try again later.");
+                    }
+                });
+                
+                return false;
+            });
+        });
+    </script>
+  </body>
+</html>
