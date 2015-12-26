@@ -23,6 +23,7 @@
         <div class="navbar-collapse collapse" role="navigation">
           <ul class="nav navbar-nav navbar-right hidden-sm">
 			<li><a href="{{ report_href }}">报表</a></li>
+			<li><a href="javascript:void(0);" onclick="javascript:modifypassword();">帐号</a></li>
             <li><a href="{{ logout_href }}">注销</a></li>
           </ul>
         </div>
@@ -267,62 +268,34 @@
   </div>
   
   <!-- Modal -->
-  <div class="modal fade" id="detail_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="account_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">详细信息</h4>
+          <h3 class="modal-title" id="myModalLabel">帐号管理</h3>
         </div>
-        <div class="modal-body">
-          <table class="table table-bordered">
-            <tr>
-              <th class="col-md-1">规则编号</th><td class="col-md-1" rowspan="1" data-index="0"></td>
-              <th class="col-md-1">规则名称</th><td class="col-md-1" rowspan="1" data-index="8" colspan="3"></td>
-            </tr>
-			
-			<tr>
-				<th class="col-md-1">规则更新时间</th><td class="col-md-1" rowspan="1" data-index="1"></td>
-				<th class="col-md-1">事件所属大类</th><td class="col-md-1" rowspan="1" data-index="2" colspan="3"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">事件威胁等级</th><td class="col-md-1" rowspan="1" data-index="3"></td>
-				<th class="col-md-1">事件技术手段</th><td class="col-md-1" rowspan="1" data-index="4" colspan="3"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">服务类型</th><td class="col-md-1" rowspan="1" data-index="5" ></td>
-				<th class="col-md-1">事件流行程度</th><td class="col-md-1" rowspan="1" data-index="6"></td>
-				<th class="col-md-1">相关漏洞</th><td class="col-md-1" rowspan="1" data-index="7"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">威胁信息</th><td class="col-md-1" rowspan="1" data-index="9"></td>
-				<th class="col-md-1">相关应用</th><td class="col-md-1" rowspan="1" data-index="10" colspan="3"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">CVE ID</th><td class="col-md-1" rowspan="1" data-index="17"></td>
-				<th class="col-md-1">Bugtraq ID</th><td class="col-md-1" rowspan="1" data-index="16"></td>
-				<th class="col-md-1">NSFOCUS ID</th><td class="col-md-1" rowspan="1" data-index="15"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">详细信息</th><td class="col-md-1" rowspan="1" data-index="11" colspan="5"></td>
-			</tr>	
-			<tr>
-				<th class="col-md-1">影响系统</th><td class="col-md-1" rowspan="1" data-index="12" colspan="5"></td>
-			</tr>
-			<tr>
-				<th class="col-md-1">相关应用</th><td class="col-md-1" rowspan="1" data-index="13" colspan="5"></td>
-			</tr>					
-			<tr>
-				<th class="col-md-1">解决方案</th><td class="col-md-1" rowspan="1" data-index="14" colspan="5"></td>
-			</tr>	
-			<tr>
-				<th class="col-md-1">原始链接</th><td class="col-md-1" rowspan="1" id="rule_tmp_url" colspan="5"></td>
-			</tr>	
+		
+		<div class="input-group">
+		  <span class="input-group-addon" >当前帐号</span>
+		  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="now_count" disabled >
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" >当前密码</span>
+		  <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" id="now_password" disabled>
+		</div>		
+		<div class="input-group">
+		  <span class="input-group-addon" >重置密码</span>
+		  <input type="password" class="form-control" placeholder="New Password" aria-describedby="basic-addon1" id="new_password" disabled>
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" >确认密码</span>
+		  <input type="password" class="form-control" placeholder="New Password" aria-describedby="basic-addon1" id="new_password_retry" disabled>
+		</div>		
 
-			
-          </table>
-        </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick="reset_pass()">修改</button>
+		  <button type="button" class="btn btn-default" onclick="save_pass()">保存</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
       </div>
@@ -549,6 +522,46 @@
           
           query(0);
       });
+	
+	function modifypassword() {
+		$("#account_dialog").modal();
+	
+	}
+	
+	function reset_pass() {
+
+		$('#now_password').removeAttr("disabled");
+		$('#new_password').removeAttr("disabled");
+		$('#new_password_retry').removeAttr("disabled");
+
+	}
+	
+	function save_pass() {
+		if ($('#now_password').val() == ""){
+			alert("当前密码不得为空");
+			return;
+		
+		}
+		if ($('#new_password').val() == ""){
+			alert("新密码不得为空");
+			return;
+		}
+		if ($('#new_password_retry').val() == ""){
+			alert("请确认新密码");
+			return;
+		}
+		if ($('#new_password').val() != $('#new_password_retry').val()){
+			alert("两次输入的新密码不一致");
+			$('#new_password').val("");
+			$('#new_password_retry').val("");
+			return;
+		}
+		
+	
+	}
+	
+	
+  
   </script>
   </body>
 </html>

@@ -28,10 +28,10 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/minisearch/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.58626467" vertical-offset="182" max-vertical-offset="779">
+            <state vertical-scroll-proportion="0.5728643" vertical-offset="0" max-vertical-offset="597">
               <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
               <folding>
-                <element signature="e#28#39#0" expanded="true" />
+                <element signature="e#224#314#0" expanded="false" />
                 <element signature="e#341#1763#0" expanded="false" />
                 <element signature="e#1792#3281#0" expanded="false" />
                 <element signature="e#3308#3710#0" expanded="false" />
@@ -46,7 +46,7 @@
       <file leaf-file-name="data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minisearch/api/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="1178">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1178">
               <caret line="325" column="0" selection-start-line="325" selection-start-column="0" selection-end-line="325" selection-end-column="0" />
               <folding>
                 <element signature="e#25#39#0" expanded="true" />
@@ -127,7 +127,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -198,6 +197,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,10 +416,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19561933" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19864048" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -541,7 +541,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="522" max-vertical-offset="1577">
           <caret line="51" column="92" selection-start-line="51" selection-start-column="92" selection-end-line="51" selection-end-column="92" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -608,7 +608,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="715" max-vertical-offset="1330">
           <caret line="49" column="18" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="18" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -675,7 +675,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="1368">
           <caret line="14" column="35" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -742,7 +742,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1368">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -809,7 +809,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2052">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -876,7 +876,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="2090">
           <caret line="42" column="62" selection-start-line="42" selection-start-column="62" selection-end-line="42" selection-end-column="62" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
@@ -1059,6 +1059,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/minisearch/pages/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5544389" vertical-offset="486" max-vertical-offset="1083">
+          <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/minisearch/api/data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="1178">
@@ -1089,20 +1096,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/minisearch/pages/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5544389" vertical-offset="486" max-vertical-offset="1083">
-          <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/minisearch/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58626467" vertical-offset="182" max-vertical-offset="779">
+        <state vertical-scroll-proportion="0.5728643" vertical-offset="0" max-vertical-offset="597">
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
-            <element signature="e#28#39#0" expanded="true" />
+            <element signature="e#224#314#0" expanded="false" />
             <element signature="e#341#1763#0" expanded="false" />
             <element signature="e#1792#3281#0" expanded="false" />
             <element signature="e#3308#3710#0" expanded="false" />
