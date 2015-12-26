@@ -5,16 +5,22 @@ Created on May 24, 2015
 '''
 
 import time
-import secrets
+#import secrets
+import json
+
 
 def user_auth(user, password):
     if None == user or None == password:
         return False
-    
-    if not user in secrets.user:
+
+    with open('secret.txt', 'r') as file_tmp:
+        secret = file_tmp.read()
+    secret = json.loads(secret)
+
+    if not user in secret:
         return False
     
-    return password == secrets.user[user]
+    return password == secret[user]
 
 def set_login(request):
     request.session.set_expiry(0)

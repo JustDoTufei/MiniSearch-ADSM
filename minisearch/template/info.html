@@ -557,6 +557,36 @@
 			return;
 		}
 		
+		$.ajax({
+              url: query_url,
+              data: request_tmp,
+              type: 'post',
+              cache: false,
+              dataType: 'text',
+              
+              success: function(data) {
+                  if (data.substr(0, 5) == "error") {
+                      // TODO::!!!
+                      alert(data);
+                  } else {
+                      data_obj = JSON.parse(data);
+                      table_content = parse_to_table(page * records_per_page + 1, data_obj);
+                      $("#data_table tbody").html(table_content);
+                      rows_count = (-1 == rows_count) ? query_count() : rows_count;
+                      
+                      $("#data_table tfoot ul").html(pagination(Math.ceil(rows_count / records_per_page), current_page + 1));
+                  }
+
+                  enable_button(true);
+              },
+              
+              error: function() {
+                  // TODO::!!!
+                  alert("failed");
+                  enable_button(true);
+              }
+        });
+		
 	
 	}
 	

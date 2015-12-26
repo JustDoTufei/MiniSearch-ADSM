@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'login/$', 'api.views.login'),
     url(r'logout/$', 'api.views.logout'),
     url(r'report/$', 'api.views.report'),
+    url(r'reset_pass/$', 'api.views.reset_pass'),
 ]
