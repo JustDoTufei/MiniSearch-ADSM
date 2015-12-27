@@ -1,4 +1,3 @@
-
 # Create your views here.
 
 import json
@@ -94,10 +93,8 @@ def report(request):
 
 def login(request):
     result = {}
-    
-    #user = request.REQUEST.get('user')
+
     user = request.POST['user']
-    #password = request.REQUEST.get('password')
     password = request.POST['password']
 
     login_state = auth.user_auth(user, password)
@@ -117,6 +114,41 @@ def logout(request):
         return HttpResponse("OK")
     else:
         return HttpResponseRedirect(request_redirect)
+
+
+def reset_pass(request):
+
+    if not auth.check_login(request):
+        return HttpResponse("error: access denied", content_type="application/json")
+
+    request_str = vornone(request.POST, 'request')
+    request_data = json.loads(request_str)
+
+    if None != request_data and None != request_str:
+
+        old_pass = vornone(request_data, 'now_password')
+        new_pass = vornone(request_data, 'new_password')
+
+        user = request.session['user']
+
+        if old_pass is None or new_pass is None:
+            return HttpResponse("error")
+
+        if not auth.user_auth(user, old_pass):
+            return HttpResponse("error: Current password is error, enter again please!")
+
+        with open('secret.txt', 'r') as file_tmp:
+            secret = file_tmp.read()
+            secret = json.loads(secret)
+
+        with open('secret.txt', 'w') as file_tmp:
+            secret[user] = new_pass
+            file_tmp.write(json.dumps(secret))
+
+        auth.set_logout(request)
+        return HttpResponse("success")
+
+    return HttpResponse("error")
 
 
 def photo(request):

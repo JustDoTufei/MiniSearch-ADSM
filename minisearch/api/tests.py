@@ -3,7 +3,7 @@
 # Create your tests here.
 import json
 data = {'ca':'canimei'}
-'''
+
 
 
 with open('secret.txt', 'w') as file_tmp:
@@ -18,4 +18,4 @@ with open('secret.txt', 'r') as file_tmp:
 secret = json.loads(secret)
 
 print secret['ca']
-
+'''

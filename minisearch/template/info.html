@@ -276,10 +276,12 @@
           <h3 class="modal-title" id="myModalLabel">帐号管理</h3>
         </div>
 		
+		<!--
 		<div class="input-group">
-		  <span class="input-group-addon" >当前帐号</span>
+		  <span class="input-group-addon">当前帐号</span>
 		  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="now_count" disabled >
 		</div>
+		-->
 		<div class="input-group">
 		  <span class="input-group-addon" >当前密码</span>
 		  <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" id="now_password" disabled>
@@ -536,6 +538,8 @@
 
 	}
 	
+	var reset_pass_url = "{{reset_pass_url}}";
+	
 	function save_pass() {
 		if ($('#now_password').val() == ""){
 			alert("当前密码不得为空");
@@ -557,8 +561,10 @@
 			return;
 		}
 		
+		request_tmp = 'request={"now_password":"' + $('#now_password').val() + '","new_password":"' + $('#new_password').val() + '"}'
+		
 		$.ajax({
-              url: query_url,
+              url: reset_pass_url,
               data: request_tmp,
               type: 'post',
               cache: false,
@@ -568,14 +574,12 @@
                   if (data.substr(0, 5) == "error") {
                       // TODO::!!!
                       alert(data);
-                  } else {
-                      data_obj = JSON.parse(data);
-                      table_content = parse_to_table(page * records_per_page + 1, data_obj);
-                      $("#data_table tbody").html(table_content);
-                      rows_count = (-1 == rows_count) ? query_count() : rows_count;
-                      
-                      $("#data_table tfoot ul").html(pagination(Math.ceil(rows_count / records_per_page), current_page + 1));
-                  }
+                  } 
+				  else if(data.substr(0, 7) == "success"){
+						alert("修改成功，请重新登录");
+						window.location.href="/";
+				  }
+				  
 
                   enable_button(true);
               },
@@ -587,7 +591,7 @@
               }
         });
 		
-	
+		
 	}
 	
 	

@@ -22,15 +22,22 @@ def user_auth(user, password):
     
     return password == secret[user]
 
+
 def set_login(request):
     request.session.set_expiry(0)
     request.session['login'] = time.time()
-    
+
+    user = request.POST['user']
+    request.session['user'] = user
+
+
 def set_logout(request):
     try:
         del request.session['login']
+        del request.session['user']
     except:
         pass
-    
+
+
 def check_login(request):
     return 'login' in request.session

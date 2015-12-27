@@ -35,6 +35,7 @@ def info(request):
         'current_url': page_urls.INFO,
         'idcard_url': interface.IDCARD,
         'report_href': page_urls.REPORT,
+        'reset_pass_url': interface.RESET_PASS,
     })
     return HttpResponse(t.render(c))
 
