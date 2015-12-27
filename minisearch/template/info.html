@@ -220,7 +220,7 @@
 				<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
 				<button type="button" class="btn btn-success" id="btn_query">&nbsp&nbsp查&nbsp&nbsp&nbsp&nbsp找&nbsp&nbsp</button>
 				<label></label>
-				<button type="button" class="btn btn-primary">&nbsp&nbsp重&nbsp&nbsp&nbsp&nbsp置&nbsp&nbsp</button>
+				<button type="button" class="btn btn-primary" id="btn_reset" onclick="condition_reset()">&nbsp&nbsp重&nbsp&nbsp&nbsp&nbsp置&nbsp&nbsp</button>
 			</div>
 				
 		</div>
@@ -578,20 +578,19 @@
 				  else if(data.substr(0, 7) == "success"){
 						alert("修改成功，请重新登录");
 						window.location.href="/";
-				  }
-				  
-
-                  enable_button(true);
-              },
-              
+				  }			  
+              },            
               error: function() {
                   // TODO::!!!
                   alert("failed");
-                  enable_button(true);
               }
-        });
-		
-		
+        });		
+	}
+	
+	function condition_reset(){
+		window.location.href="/";
+	
+	
 	}
 	
 	
