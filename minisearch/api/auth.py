@@ -7,13 +7,15 @@ Created on May 24, 2015
 import time
 #import secrets
 import json
+import sys
 
 
 def user_auth(user, password):
     if None == user or None == password:
         return False
 
-    with open('secret.txt', 'r') as file_tmp:
+    secret_file = sys.path[0] + "\\secret.txt"
+    with open(secret_file, 'r') as file_tmp:
         secret = file_tmp.read()
     secret = json.loads(secret)
 

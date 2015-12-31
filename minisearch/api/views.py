@@ -5,6 +5,7 @@ import data
 import auth
 import os
 import urllib2
+import sys
 
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, FileResponse
 
@@ -137,11 +138,12 @@ def reset_pass(request):
         if not auth.user_auth(user, old_pass):
             return HttpResponse("error: Current password is error, enter again please!")
 
-        with open('secret.txt', 'r') as file_tmp:
+        secret_file = sys.path[0] + "\\secret.txt"
+        with open(secret_file, 'r') as file_tmp:
             secret = file_tmp.read()
             secret = json.loads(secret)
 
-        with open('secret.txt', 'w') as file_tmp:
+        with open(secret_file, 'w') as file_tmp:
             secret[user] = new_pass
             file_tmp.write(json.dumps(secret))
 
