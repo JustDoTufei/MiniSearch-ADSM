@@ -23,7 +23,7 @@ def query(request):
     
     #request_data = request.REQUEST.get('request')
     request_data = request.POST['request']
-    print request_data
+    #print request_data
 
     response = "error"
 
@@ -57,7 +57,7 @@ def report(request):
     #request_data = request.REQUEST.get('request')
     request_data = request.POST['request']
 
-    print request_data
+    #print request_data
 
     response = "error"
 
@@ -83,7 +83,7 @@ def report(request):
             if report_icon == "3":
                 report_data3 = data.report_query3(report_type, report_start_date, report_end_date)
                 response = json.dumps(report_data3)
-                print response
+                #print response
 
         except:
             pass

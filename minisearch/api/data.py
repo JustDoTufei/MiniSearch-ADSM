@@ -273,14 +273,15 @@ def query(input_src=None, input_sport=None, input_dst=None, input_dport=None, te
             args.insert(0, pagesize)
             args.insert(1, page*pagesize)
 
-        print sql_query
+        #print sql_query
         cursor.execute(sql_query, tuple(args))
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
 
     except Exception, e:
-        print "db-error:", e
+        pass
+        #print "db-error:", e
 
     return rows
 
@@ -321,7 +322,8 @@ def report_query1(report_type, report_start_date, report_end_date):
         return attack_type_count_list
 
     except Exception, e:
-        print "db-error", e
+        pass
+        #print "db-error", e
 
 
 def report_query2(report_type, report_start_date, report_end_date):
@@ -385,7 +387,8 @@ def report_query2(report_type, report_start_date, report_end_date):
         conn.close()
 
     except Exception, e:
-        print "db-error", e
+        pass
+        #print "db-error", e
 
     return attack_type_count_unit_dict
 
@@ -422,7 +425,8 @@ def report_query3(report_type, report_start_date, report_end_date):
         conn.close()
 
     except Exception, e:
-        print "db-error", e
+        pass
+        #print "db-error", e
 
     return top_n_list_result
 
